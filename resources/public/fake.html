@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"></meta>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script src="http://fb.me/react-0.9.0.js"></script>
+    <link rel="stylesheet" href="css/main.css" type="text/css" media="all" />
+
+  </head>
+  <body>
+    <!-- entry point for components -->
+    <div id="content">
+      <h1>If you see me, something's broken =(</h1>
+    </div>
+
+
+    <header>
+      <dl>
+        <dt><label for="beats">Beats</label></dt>
+        <dd>
+          <input id="beats" class="ember-view ember-text-field" type="number" min="1" max="32" value="16">
+        </dd>
+        <dt>
+          <label for="quant">Quant</label>
+        </dt>
+        <dd>
+          <input id="quant" class="ember-view ember-text-field" type="number" min="1" max="16" value="1">
+        </dd>
+      </dl>
+      <dl id="instrument">
+        <dt><label for="shape">shape</label></dt>
+        <dd>
+          <select id="shape" class="ember-view ember-select"><option id="ember875" class="ember-view" value="sine">sine</option><option id="ember876" class="ember-view" value="square">square</option><option id="ember877" class="ember-view" value="sawtooth">sawtooth</option><option id="ember878" class="ember-view" value="triangle">triangle</option></select>
+        </dd>
+        <dt><label for="volume">volume</label></dt>
+        <dd>
+          <input id="volume" class="ember-view" type="range" min="0" max="1" step="0.01" value="0.75">
+        </dd>
+      </dl>
+
+
+    </header>
+
+    <section id="piano-roll">
+      <section id="grid">
+        <div style="left: 0%" data-bindattr-19="19" class="play-bar"></div>
+        <div id="ember888" class="ember-view measures"><div id="ember891" class="ember-view measure" style="width: 6.25%;"></div><div id="ember892" class="ember-view measure" style="width: 6.25%;"></div><div id="ember893" class="ember-view measure" style="width: 6.25%;"></div><div id="ember894" class="ember-view measure" style="width: 6.25%;"></div><div id="ember895" class="ember-view measure" style="width: 6.25%;"></div><div id="ember896" class="ember-view measure" style="width: 6.25%;"></div><div id="ember897" class="ember-view measure" style="width: 6.25%;"></div><div id="ember898" class="ember-view measure" style="width: 6.25%;"></div><div id="ember899" class="ember-view measure" style="width: 6.25%;"></div><div id="ember900" class="ember-view measure" style="width: 6.25%;"></div><div id="ember901" class="ember-view measure" style="width: 6.25%;"></div><div id="ember902" class="ember-view measure" style="width: 6.25%;"></div><div id="ember903" class="ember-view measure" style="width: 6.25%;"></div><div id="ember904" class="ember-view measure" style="width: 6.25%;"></div><div id="ember905" class="ember-view measure" style="width: 6.25%;"></div><div id="ember906" class="ember-view measure" style="width: 6.25%;"></div></div>
+        <ul>
+
+          <li class="row" data-bindattr-20="20">
+            <ul id="ember1029" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-21="21">
+            <ul id="ember1032" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-22="22">
+            <ul id="ember1035" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-23="23">
+            <ul id="ember1038" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-24="24">
+            <ul id="ember1041" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-25="25">
+            <ul id="ember1044" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-26="26">
+            <ul id="ember1047" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-27="27">
+            <ul id="ember1050" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-28="28">
+            <ul id="ember1053" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-29="29">
+            <ul id="ember1056" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-30="30">
+            <ul id="ember1059" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-31="31">
+            <ul id="ember1062" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-32="32">
+            <ul id="ember1065" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-33="33">
+            <ul id="ember1068" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-34="34">
+            <ul id="ember1071" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-35="35">
+            <ul id="ember1074" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-36="36">
+            <ul id="ember1077" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-37="37">
+            <ul id="ember1080" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-38="38">
+            <ul id="ember1083" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-39="39">
+            <ul id="ember1086" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-40="40">
+            <ul id="ember1089" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-41="41">
+            <ul id="ember1092" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-42="42">
+            <ul id="ember1095" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-43="43">
+            <ul id="ember1098" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-44="44">
+            <ul id="ember1101" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-45="45">
+            <ul id="ember1104" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-46="46">
+            <ul id="ember1107" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-47="47">
+            <ul id="ember1110" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-48="48">
+            <ul id="ember1113" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-49="49">
+            <ul id="ember1116" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-50="50">
+            <ul id="ember1119" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-51="51">
+            <ul id="ember1122" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-52="52">
+            <ul id="ember1125" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-53="53">
+            <ul id="ember1128" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-54="54">
+            <ul id="ember1131" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-55="55">
+            <ul id="ember1134" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-56="56">
+            <ul id="ember1137" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-57="57">
+            <ul id="ember1140" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-58="58">
+            <ul id="ember1143" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-59="59">
+            <ul id="ember1146" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-60="60">
+            <ul id="ember1149" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-61="61">
+            <ul id="ember1152" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-62="62">
+            <ul id="ember1155" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-63="63">
+            <ul id="ember1158" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-64="64">
+            <ul id="ember1161" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-65="65">
+            <ul id="ember1164" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-66="66">
+            <ul id="ember1167" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-67="67">
+            <ul id="ember1170" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-68="68">
+            <ul id="ember1173" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="sharp row" data-bindattr-69="69">
+            <ul id="ember1176" class="ember-view notes"></ul>
+          </li>
+
+
+          <li class="row" data-bindattr-70="70">
+            <ul id="ember1179" class="ember-view notes"></ul>
+          </li>
+
+
+        </ul>
+      </section>
+      <ul id="keyboard">
+
+        <li id="ember1242" class="ember-view row">
+          B7
+        </li>
+
+        <li id="ember1250" class="ember-view row sharp">
+          A#6
+        </li>
+
+        <li id="ember1252" class="ember-view row">
+          A6
+        </li>
+
+        <li id="ember1254" class="ember-view row sharp">
+          G#6
+        </li>
+
+        <li id="ember1256" class="ember-view row">
+          G6
+        </li>
+
+        <li id="ember1258" class="ember-view row sharp">
+          F#6
+        </li>
+
+        <li id="ember1260" class="ember-view row">
+          F6
+        </li>
+
+        <li id="ember1262" class="ember-view row">
+          E6
+        </li>
+
+        <li id="ember1264" class="ember-view row sharp">
+          D#6
+        </li>
+
+        <li id="ember1266" class="ember-view row">
+          D6
+        </li>
+
+        <li id="ember1268" class="ember-view row sharp">
+          C#6
+        </li>
+
+        <li id="ember1270" class="ember-view row">
+          C6
+        </li>
+
+        <li id="ember1272" class="ember-view row">
+          B6
+        </li>
+
+        <li id="ember1274" class="ember-view row sharp">
+          A#5
+        </li>
+
+        <li id="ember1276" class="ember-view row">
+          A5
+        </li>
+
+        <li id="ember1278" class="ember-view row sharp">
+          G#5
+        </li>
+
+        <li id="ember1280" class="ember-view row">
+          G5
+        </li>
+
+        <li id="ember1282" class="ember-view row sharp">
+          F#5
+        </li>
+
+        <li id="ember1284" class="ember-view row">
+          F5
+        </li>
+
+        <li id="ember1286" class="ember-view row">
+          E5
+        </li>
+
+        <li id="ember1288" class="ember-view row sharp">
+          D#5
+        </li>
+
+        <li id="ember1290" class="ember-view row">
+          D5
+        </li>
+
+        <li id="ember1292" class="ember-view row sharp">
+          C#5
+        </li>
+
+        <li id="ember1294" class="ember-view row">
+          C5
+        </li>
+
+        <li id="ember1296" class="ember-view row">
+          B5
+        </li>
+
+        <li id="ember1298" class="ember-view row sharp">
+          A#4
+        </li>
+
+        <li id="ember1300" class="ember-view row">
+          A4
+        </li>
+
+        <li id="ember1302" class="ember-view row sharp">
+          G#4
+        </li>
+
+        <li id="ember1304" class="ember-view row">
+          G4
+        </li>
+
+        <li id="ember1306" class="ember-view row sharp">
+          F#4
+        </li>
+
+        <li id="ember1308" class="ember-view row">
+          F4
+        </li>
+
+        <li id="ember1310" class="ember-view row">
+          E4
+        </li>
+
+        <li id="ember1312" class="ember-view row sharp">
+          D#4
+        </li>
+
+        <li id="ember1314" class="ember-view row">
+          D4
+        </li>
+
+        <li id="ember1316" class="ember-view row sharp">
+          C#4
+        </li>
+
+        <li id="ember1318" class="ember-view row">
+          C4
+        </li>
+
+        <li id="ember1320" class="ember-view row">
+          B4
+        </li>
+
+        <li id="ember1322" class="ember-view row sharp">
+          A#3
+        </li>
+
+        <li id="ember1324" class="ember-view row">
+          A3
+        </li>
+
+        <li id="ember1326" class="ember-view row sharp">
+          G#3
+        </li>
+
+        <li id="ember1328" class="ember-view row">
+          G3
+        </li>
+
+        <li id="ember1330" class="ember-view row sharp">
+          F#3
+        </li>
+
+        <li id="ember1332" class="ember-view row">
+          F3
+        </li>
+
+        <li id="ember1334" class="ember-view row">
+          E3
+        </li>
+
+        <li id="ember1336" class="ember-view row sharp">
+          D#3
+        </li>
+
+        <li id="ember1338" class="ember-view row">
+          D3
+        </li>
+
+        <li id="ember1340" class="ember-view row sharp">
+          C#3
+        </li>
+
+        <li id="ember1342" class="ember-view row">
+          C3
+        </li>
+
+        <li id="ember1344" class="ember-view row">
+          B3
+        </li>
+
+        <li id="ember1346" class="ember-view row sharp">
+          A#2
+        </li>
+
+        <li id="ember1348" class="ember-view row">
+          A2
+        </li>
+      </ul>
+    </section>
+
+    <script src="js/out/goog/base.js" type="text/javascript"></script>
+    <script src="js/seq26.js" type="text/javascript"></script>
+    <script type="text/javascript">goog.require("seq26.core");</script>
+  </body>
+</html>
