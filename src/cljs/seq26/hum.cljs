@@ -1,18 +1,17 @@
 (ns seq26.hum)
 
-(defn get-osc-type [osc type]
-  (condp = type
-    :sawtooth (.-SAWTOOTH osc)
-    :sine (.-SINE osc)
-    :square (.-SQUARE osc)
-    :triangle (.-TRIANGLE osc)))
+(def osc-types
+  {:sine 0
+   :square 1
+   :sawtooth 2
+   :triangle 3})
 
 (defn create-osc
   ([ctx]
      (.createOscillator ctx))
   ([ctx type]
      (let [osc (.createOscillator ctx)
-           osc-type (get-osc-type osc type)]
+           osc-type (osc-types type)]
        (set! (.-type osc) osc-type)
        osc)))
 
@@ -55,7 +54,7 @@
 (defn note-on
   [output osc freq & {:keys [time ramp-time]
                       :or {time (curr-time (ctx-for osc))
-                           ramp-time 0.1}}]
+                           ramp-time 0.01}}]
   (.setValueAtTime (.-frequency osc) freq time)
   (.linearRampToValueAtTime (.-gain output) 1.0 (+ time ramp-time)))
 
@@ -67,7 +66,7 @@
 (defn note-off
   [output & {:keys [time ramp-time]
              :or {time (curr-time (ctx-for output))
-                  ramp-time 0.1}}]
+                  ramp-time 0.01}}]
   (.linearRampToValueAtTime (.-gain output) 0.0 (+ time ramp-time)))
 
 (defn create-context []
@@ -76,7 +75,7 @@
     (constructor.)))
 
 (defn midi->hz [note-num]
-  (let [expt-numerator (- note-num 49)
+  (let [expt-numerator (- note-num 69)
         expt-denominator 12
         expt (/ expt-numerator expt-denominator)
         multiplier (.pow js/Math 2 expt)

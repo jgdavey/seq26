@@ -8,12 +8,11 @@
                  ;; CLJ
                  [ring/ring-core "1.3.0"]
                  [compojure "1.1.8"]
-                 [cheshire "5.3.1"]
 
                  ;; CLJS
                  [org.clojure/clojurescript "0.0-2277"]
                  [org.clojure/core.async  "0.1.303.0-886421-alpha"]
-                 [om "0.6.5"]]
+                 [om "0.7.1"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
             [lein-ring "0.8.11"]
@@ -25,6 +24,8 @@
          :init    seq26.core/init}
 
   :source-paths ["src/clj"]
+
+  :profiles {:dev {:plugins [[com.cemerick/austin "0.1.4"]]}}
 
   :cljsbuild {
               :builds [{:id "dev"
