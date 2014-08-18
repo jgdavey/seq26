@@ -80,11 +80,11 @@
         (.linearRampToValueAtTime (.-gain note) 0.0 (+ off-at 0.005))))))
 
 (defn env-off-inst
-  [notes decay]
+  [notes & [decay]]
   (reify Instrument
     (-play-at [_ midi on-at off-at]
       (let [note (notes midi)
-            decay (or decay 1.0)] ; length of decay, in seconds
+            decay (or decay 1.4)] ; length of decay, in seconds
         (.linearRampToValueAtTime (.-gain note) 0.0 (- on-at 0.001))
         (.cancelScheduledValues (.-gain note) on-at)
         (.linearRampToValueAtTime (.-gain note) 1.0 on-at)
@@ -100,10 +100,10 @@
     (env-off-inst notes)))
 
 
-(def dejitter-factor 0.2) ; 200ms of dejitter
+(def dejitter-factor (beat->s 1)) ; one beat of dejitter
 
 (defn current-beat [zero]
-  (s->beats (+ dejitter-factor (- (.-currentTime ctx) zero))))
+  (s->beats (+ (- (.-currentTime ctx) zero) dejitter-factor)))
 
 (defn scheduler
   "Takes an 'instrument'.
@@ -115,11 +115,9 @@
         c (chan 8)]
     (go (loop []
           (when-let [n (<! c)]
-            (let [s (- (.-currentTime ctx) zero-t)
-                  dist (- (beat->s (:beat n)) s)]
-              (.log js/console dist)
-              (when (> dist dejitter-factor) ; when too far ahead
-                (<! (timeout (* 1000 dist)))) ; wait for that distance
+            (let [beat (current-beat zero-t)]
+              (when (> (- (:beat n) beat) 0) ; when more than a beat ahead (jitter applied)
+                (<! (timeout (* 1000 (beat->s 1))))) ; wait for one beat, then proceed
               (let [{:keys [midi beat length]} n
                     from (+ zero-t (beat->s beat))
                     until (+ from (beat->s length))]
@@ -136,6 +134,7 @@
      (async/onto-chan sch notes))))
 
 
+(comment
 
 (play [{:midi 69 :beat 0 :length 1}
        {:midi 73 :beat 0.25 :length 1}
@@ -156,9 +155,8 @@
        {:midi 74 :beat 6 :length 1}
        {:midi 76 :beat 6 :length 1}
        {:midi 52 :beat 7 :length 0.5} ]
-      oscillator)
+      bell)
 
-(comment
-(swap! app-state assoc-in [:params :bpm] 90)
+(swap! app-state assoc-in [:params :bpm] 100)
 
 )
