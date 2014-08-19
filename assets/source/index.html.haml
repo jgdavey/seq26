@@ -1,0 +1,10 @@
+%h1 seq26
+
+#app
+  #pianoroll
+    #keys
+      %ul
+        - 3.times do
+          - %w(C Db D Eb E F Gb G Ab A Bb B).reverse.each do |key|
+            %li{class: key.length == 2 ? "black" : "white"}= key
+

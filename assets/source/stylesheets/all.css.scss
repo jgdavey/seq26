@@ -1,0 +1,57 @@
+@charset "utf-8";
+
+body {
+  background: #d4d4d4 url("../images/background.png");
+  font-family: sans-serif; }
+
+h1 {
+  text-align: center;
+  color: rgba(0, 0, 0, .3);
+  font-weight: bold;
+  font-size: 32px;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+  margin: 0; }
+
+$pianowidth: 80px;
+$pianoheight: 20px;
+
+#app {
+  #pianoroll {
+    background-color: #fff;
+    ul {
+      list-style: none;
+      width: $pianowidth;
+      border-top: 1px solid #999;
+      margin: 0 0 0 -2px;
+      padding: 0;
+
+      li {
+        margin: 0;
+        position: relative;
+        border-radius: 2px;
+        font-size: 8px;
+        text-align: right;
+        line-height: $pianoheight;
+        padding: 0 4px 0 0;
+
+        &.black {
+          color: #ccc;
+          z-index: 1;
+          margin: $pianoheight / -2 0;
+          background-color: #000;
+          width: ($pianowidth / 2) - 4px;
+          height: $pianoheight;
+        }
+
+        &.white {
+          border-right: 1px solid #999;
+          border-bottom: 1px solid #999;
+          width: $pianowidth - 4px;
+          height: $pianoheight;
+        }
+      }
+    }
+  }
+}
