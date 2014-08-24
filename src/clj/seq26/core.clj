@@ -8,7 +8,8 @@
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.nested-params :refer [wrap-nested-params]]
             [ring.middleware.keyword-params :refer [wrap-keyword-params]])
-  (:import [java.net URL]))
+  (:import [java.net URL]
+           [java.io FileNotFoundException]))
 
 (defn- request-path
   "Return the path + query of the request."
@@ -36,14 +37,18 @@
   [url-root]
   (->
     (fn [request]
-      (let [url (URL. (str url-root (request-path request)))]
-        (response/render url request)))
+      (try
+        (let [url (URL. (str url-root (request-path request)))]
+          (response/render url request))
+        (catch FileNotFoundException e
+          (println e))))
     wrap-content-type
     wrap-head))
 
 (defroutes app-routes
   (route/resources "/")
-  (proxy-response "http://localhost:4567"))
+  (proxy-response "http://localhost:4567")
+  (route/not-found "Sorry. That's not here."))
 
 (def app
   (-> #'app-routes
