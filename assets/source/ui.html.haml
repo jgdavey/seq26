@@ -12,8 +12,9 @@
       - 3.times do
         - %w(C Db D Eb E F Gb G Ab A Bb B).reverse.each do |key|
           .lane{class: (key.length == 2 ? "black" : "white")}
+            .notes
+              - [0,0,0,1,3,5].sample.times do
+                .on{style: "width: #{[12.5,25,5].sample}%; left: #{[0,25,50,12.5,75].sample}%"}
             - 16.times do |i|
               .beat-marker{style: "left: #{i * 100.0 / 16}%"}
-            - [0,0,0,1,3,5].sample.times do
-              .on{style: "width: #{[12.5,25,5].sample}%; left: #{[0,25,50,12.5,75].sample}%"}
 
