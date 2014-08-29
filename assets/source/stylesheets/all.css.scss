@@ -78,6 +78,12 @@ $pianoheight: 20px;
         position: absolute;
         z-index: 999;
         height: 100%;
+        left: 0;
+
+        &.animate {
+          left: 100%;
+          margin-left: -1px;
+        }
       }
     }
 

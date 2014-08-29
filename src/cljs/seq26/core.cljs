@@ -170,13 +170,8 @@
      zero-t)))
 
 (defn play! []
-  (let [zero-t (play (:sequence @app-state))
-        cb (fn cb []
-             (when (get-in @app-state [:playback :playing?])
-               (swap! app-state assoc-in [:playback :current-beat] (current-beat zero-t))
-               (js/requestAnimationFrame cb)))]
-     (swap! app-state update-in [:playback] assoc :zero-t zero-t, :playing? true)
-     (js/requestAnimationFrame cb)))
+  (let [zero-t (play (:sequence @app-state))]
+     (swap! app-state update-in [:playback] assoc :zero-t zero-t, :playing? true)))
 
 (defn stop! []
   (swap! app-state assoc-in [:playback :playing?] false))
@@ -214,19 +209,19 @@
                                   :style #js {:left (str (/ i 0.16) "%")}}))
                   (range 17))))))
 
-(defn- marker-percent [zero-t]
-  (let [b (current-beat zero-t)]
-    (if (neg? b)
-      0.0
-      (/ (mod b 16) 0.16))))
+(defn css3-transition
+  ([prop duration] (css3-transition prop duration "linear"))
+  ([prop duration ease] (css3-transition prop duration ease 0))
+  ([prop duration ease del]
+   (str prop " " duration "s " ease " " del "s")))
 
 (defn playhead-view [{:keys [zero-t playing?]} owner]
   (reify
     om/IRender
     (render [_]
-      (when playing?
-        (dom/div #js {:className "playhead"
-                      :style #js {:left (str (marker-percent zero-t) "%")}})))))
+      (let [bar-s (beat->s 1)]
+      (dom/div #js {:className (str "playhead" (when playing? " animate"))
+                    :style (when playing? #js {:transition (css3-transition "left" (* 16 bar-s) "linear" (+ 0.02 bar-s))})})))))
 
 (defn seq26-app [app owner]
   (reify
@@ -286,5 +281,8 @@
 
 (deref app-state)
 (swap! app-state assoc-in [:params :bpm] 100)
+
+(play!)
+(stop!)
 
 )
