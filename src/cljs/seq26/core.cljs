@@ -5,7 +5,7 @@
               [om.core :as om :include-macros true]
               [om.dom :as dom :include-macros true]
               [seq26.hum :as hum]
-              [seq26.utils :as util :refer [find-first not-nil?]]))
+              [seq26.utils :as util :refer [find-first not-nil? guid]]))
 
 (enable-console-print!)
 
@@ -27,29 +27,36 @@
                               :color (if (= 2 (count (name note))) "black" "white")}
             ) notes (iterate inc start-midi))))
 
+(def example-song
+  (mapv #(assoc % :id (guid))
+        [{:midi 69 :beat 0 :length 1}
+         {:midi 73 :beat 0.25 :length 1}
+         {:midi 76 :beat 0.5 :length 1}
+         {:midi 52 :beat 1 :length 0.5}
+
+         {:midi 69 :beat 2 :length 1}
+         {:midi 73 :beat 2 :length 1}
+         {:midi 76 :beat 2 :length 1}
+         {:midi 52 :beat 3 :length 0.5}
+
+         {:midi 69 :beat 4 :length 1}
+         {:midi 74 :beat 4.25 :length 1}
+         {:midi 76 :beat 4.5 :length 1}
+         {:midi 52 :beat 5 :length 0.5}
+
+         {:midi 69 :beat 6 :length 1}
+         {:midi 74 :beat 6 :length 1}
+         {:midi 76 :beat 6 :length 1}
+         {:midi 52 :beat 7 :length 0.5} ]))
+
 (def app-state
   (atom {:params {:bpm 120}
          :playback {:zero-t 0.0
                     :playing? false}
-         :sequence [{:midi 69 :beat 0 :length 1}
-                    {:midi 73 :beat 0.25 :length 1}
-                    {:midi 76 :beat 0.5 :length 1}
-                    {:midi 52 :beat 1 :length 0.5}
+         :sequence example-song }))
 
-                    {:midi 69 :beat 2 :length 1}
-                    {:midi 73 :beat 2 :length 1}
-                    {:midi 76 :beat 2 :length 1}
-                    {:midi 52 :beat 3 :length 0.5}
 
-                    {:midi 69 :beat 4 :length 1}
-                    {:midi 74 :beat 4.25 :length 1}
-                    {:midi 76 :beat 4.5 :length 1}
-                    {:midi 52 :beat 5 :length 0.5}
 
-                    {:midi 69 :beat 6 :length 1}
-                    {:midi 74 :beat 6 :length 1}
-                    {:midi 76 :beat 6 :length 1}
-                    {:midi 52 :beat 7 :length 0.5} ] }))
 
 (defn- assoc-notes [keys notes]
   (map (fn [k]
@@ -163,7 +170,8 @@
   ([notes]
    (play notes oscillator))
   ([notes inst-fn]
-   (let [inst (make-inst inst-fn (set (map :midi notes)))
+   (let [notes (sort-by :beat notes)
+         inst (make-inst inst-fn (set (map :midi notes)))
          zero-t (+ (.-currentTime ctx) dejitter-factor)
          sch (scheduler zero-t inst)]
      (async/onto-chan sch notes)
@@ -203,7 +211,7 @@
     (render [_]
       (apply dom/div #js {:className (str color " lane")}
              (apply dom/div #js {:className "notes"}
-                    (om/build-all note-view notes))
+                    (om/build-all note-view notes {:key :id}))
              (map (fn [i]
                     (dom/div #js {:className "beat-marker"
                                   :style #js {:left (str (/ i 0.16) "%")}}))
