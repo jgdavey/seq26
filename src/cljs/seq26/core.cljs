@@ -55,8 +55,23 @@
                     :playing? false}
          :sequence example-song }))
 
+(defn add-note! [note]
+  (swap! app-state update-in [:sequence] conj note))
 
+(defn select-notes [notes pred]
+  (mapv (fn [n]
+          (if (pred n)
+            (assoc n :selected? true)
+            n)) notes))
 
+(defn select-notes! [pred]
+  (swap! app-state update-in [:sequence] select-notes pred))
+
+(defn remove-selected [coll]
+  (filterv (complement :selected?) coll))
+
+(defn remove-selected! []
+  (swap! app-state update-in [:sequence] remove-selected))
 
 (defn- assoc-notes [keys notes]
   (map (fn [k]
@@ -168,7 +183,7 @@
 
 (defn play
   ([notes]
-   (play notes oscillator))
+   (play notes bell))
   ([notes inst-fn]
    (let [notes (sort-by :beat notes)
          inst (make-inst inst-fn (set (map :midi notes)))
@@ -186,11 +201,14 @@
 
 ;; Om components
 
-(defn piano-key [{:keys [octave label color note]} owner]
+(defn piano-key [{:keys [octave midi label color note]} owner]
   (reify
     om/IRender
     (render [_]
-      (dom/li #js { :className (str color " note-" note)}
+      (dom/li #js {:className (str color " note-" note)
+                   :onClick (fn [e]
+                              (.preventDefault e)
+                              (select-notes! (fn [n] (= midi (:midi n)))))}
               label))))
 
 (defn note-view [{:keys [beat length selected?] :as note} owner]
@@ -200,16 +218,46 @@
       (dom/div #js {:className (if selected? "selected on" "on")
                     :onClick (fn [e]
                                (.preventDefault e)
+                               (.stopPropagation e)
                                (om/update! note [:selected?] (not selected?)))
                     :style #js {:left  (str (/ beat 0.16) "%")
                                 :width (str (/ length 0.16) "%")}}
                ""))))
 
-(defn lane-view [{:keys [octave label color note notes]} owner]
+(defn not-nan? [n]
+  (not (js/isNaN n)))
+
+(defn- coords [e]
+  (let [x 0, y 0, el (.-target e)]
+    (loop [x x
+           y y
+           el el]
+      (if (and el (not-nan? (.-offsetLeft el)) (not-nan? (.-offsetTop el)))
+        (recur (+ x (- (.-offsetLeft el) (.-scrollLeft el)))
+               (+ y (- (.-offsetTop el) (.-scrollTop el)))
+               (.-offsetParent el))
+        {:x (- (.-clientX e) x) :y (- (.-clientY e) y)}))))
+
+(defn x-percent [e]
+  (let [w (.. e -target -offsetWidth)
+        {:keys [x]} (coords e)]
+    (/ x w)))
+
+(def quantize-factor 4)
+(defn quantize [n]
+  (/ (Math/round (* quantize-factor n)) quantize-factor))
+
+(defn nearest-beat [e]
+  (quantize (* 16 (x-percent e))))
+
+(defn lane-view [{:keys [octave label color note notes midi]} owner]
   (reify
     om/IRender
     (render [_]
-      (apply dom/div #js {:className (str color " lane")}
+      (apply dom/div #js {:className (str color " lane")
+                          :onClick (fn [e]
+                                     (.preventDefault e)
+                                     (add-note! {:midi midi :beat (nearest-beat e) :length 1 :id (guid)}))}
              (apply dom/div #js {:className "notes"}
                     (om/build-all note-view notes {:key :id}))
              (map (fn [i]
@@ -258,10 +306,13 @@
   (fn [item]
     (update-in item [attr] f)))
 
-(let [up (f-attr inc :midi)
+(let [q (/ 1 quantize-factor)
+      up (f-attr inc :midi)
       down (f-attr dec :midi)
-      right (f-attr (partial + 0.25) :beat)
-      left (f-attr #(- % 0.25) :beat)
+      right (f-attr (partial + q) :beat)
+      left (f-attr #(- % q) :beat)
+      shorten (f-attr #(- % q) :length)
+      elongate (f-attr #(+ % q) :length)
       update! (fn [f]
                 (swap! app-state update-in [:sequence]
                        #(mapv (partial transform :selected? f) %)))]
@@ -271,19 +322,30 @@
           (if (get-in @app-state [:playback :playing?])
             (stop!)
             (play!)))
-     37 (fn [e] (update! left))
+     37 (fn [e]
+          (if (.-shiftKey e)
+            (update! shorten)
+            (update! left)))
+     39 (fn [e]
+          (if (.-shiftKey e)
+            (update! elongate)
+            (update! right)))
      38 (fn [e] (update! up))
-     39 (fn [e] (update! right))
-     40 (fn [e] (update! down))}))
+     40 (fn [e] (update! down))
+     8  (fn [e]
+          (.stopPropagation e)
+          (remove-selected!))}))
 
 (let [c (chan 1)]
   (go (loop []
         (when-let [event (<! c)]
           (when-let [f (keyboard-events (.-keyCode event))]
-            (.preventDefault event)
             (f event))
           (recur))))
-  (.addEventListener js/document "keydown" (fn [e] (put! c e))))
+  (.addEventListener js/document "keydown" (fn [e]
+                                             (when (keyboard-events (.-keyCode e))
+                                               (.preventDefault e))
+                                             (put! c e))))
 
 (comment
 
